@@ -2,7 +2,7 @@
 
 #------------------------------------------------------------------------------
 # check_http_content
-#   retrieve an http/s url and checks its content for a given expression
+# 	retrieve an http/s url and checks its content for a given expression
 # 	if the expression is found exits with OK, otherwise exits with CRITICAL
 #
 # Copyright 2007, CAPSiDE SL	http://www.capside.com
@@ -56,41 +56,26 @@ my $ua = LWP::UserAgent->new;
 $ua->timeout($opts{t});
 
 # retrieve url
-my $response = $ua->get($opts{U});
-
-  my $expected_length;
-      my $bytes_received = 0;
-      $ua->request(HTTP::Request->new('GET', $opts{U}),
-                   sub {
-                       my($chunk, $res) = @_;
-                       $bytes_received += length($chunk);
-                       unless (defined $expected_length) {
-                          $expected_length = $res->content_length || 0;
-                       }
-                       if ($expected_length) {
-                            printf STDERR "%d%% - ",
-                                      100 * $bytes_received / $expected_length;
-                       }
-
-                       # XXX Should really do something with the chunk itself
-                       # print $chunk;
-                   });
-
-                       #print "$bytes_received bytes received\n";
-my $end_run = time();
-my $run_time = $end_run - $start_run;
+ my $response = $ua->get($opts{U});
+ my $expected_length;
+ my $bytes_received = 0;
+ my $end_run = time();
+ my $run_time = $end_run - $start_run;
 if (not $response->is_success) {
-	
-	print "ERROR: CANNOT RETRIEVE URL: ", $response->status_line, "|rtime=".$run_time.";;;0.000000 size=".$bytes_received."B \n";
+	print "ERROR: CANNOT RETRIEVE URL: ", $response->status_line, "|rtime=".$run_time.";;;0.000000 size=0B \n";
 	$status = EXIT_UNKNOWN;
 } else {
 	my $content = $response->content;
 	if ($content =~ m/$opts{m}/gsm) {
+               my($chunk, $resp) = $content;
+               $bytes_received += length($chunk);
+               unless (defined $expected_length) { $expected_length = $response->content_length || 0; }
+               if ($expected_length) { printf STDERR "%d%% - ", 100 * $bytes_received / $expected_length; }
 		print "CONTENT OK: EXPR $opts{m} FOUND on $opts{U} FOUND|rtime=".$run_time.";;;0.000000 size=".$bytes_received."B \n";
 		$status = EXIT_OK;
 	} else {
 		my @output_lines = split(/\n/, $content);
-		print "CONTENT ERROR: EXPR $opts{m} NOT FOUND on $opts{U} NOT FOUND (last: $output_lines[$#output_lines])\nfull output was:\n".$content."|rtime=".$run_time.";;;0.000000 size=".$bytes_received."B \n";
+		print "CONTENT ERROR: EXPR $opts{m} NOT FOUND on $opts{U} NOT FOUND (last: $output_lines[$#output_lines])\nfull output was:\n".$content."|rtime=".$run_time.";;;0.000000 size=0B \n";
 		$status = EXIT_CRITICAL;
 	}
 }
