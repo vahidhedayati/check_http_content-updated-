@@ -26,6 +26,9 @@
 use strict;
 use Getopt::Std;
 use LWP::UserAgent;
+use Time::HiRes qw/ time sleep /;
+
+
 
 my $plugin_name = 'check_http_content';
 my $VERSION		= '0.01';
@@ -39,7 +42,7 @@ use constant EXIT_WARNING	=> 1;
 use constant EXIT_CRITICAL	=> 2;
 use constant EXIT_UNKNOWN	=> 3;
 
-my $start_run = time();
+my $start_run = time;
 # parse cmd opts
 my %opts;
 getopts('vU:t:m:', \%opts);
@@ -59,10 +62,10 @@ $ua->timeout($opts{t});
  my $response = $ua->get($opts{U});
  my $expected_length;
  my $bytes_received = 0;
- my $end_run = time();
+ my $end_run   = time;
  my $run_time = $end_run - $start_run;
 if (not $response->is_success) {
-	print "ERROR: CANNOT RETRIEVE URL: ", $response->status_line, "|time=".$run_time."s;;;0.000000 size=0B;;;0 \n";
+	print "ERROR: CANNOT RETRIEVE URL: $opts{m} ", $response->status_line, "|time=".$run_time."s;;;0.000000 size=0B;;;0 \n";
 	$status = EXIT_UNKNOWN;
 } else {
 	my $content = $response->content;
@@ -71,7 +74,7 @@ if (not $response->is_success) {
                $bytes_received += length($chunk);
                unless (defined $expected_length) { $expected_length = $response->content_length || 0; }
                if ($expected_length) { printf STDERR "%d%% - ", 100 * $bytes_received / $expected_length; }
-		print "CONTENT OK: EXPR $opts{m} FOUND on $opts{U} FOUND|time=".$run_time."s;;;0.000000 size=".$bytes_received."B;;;0 \n";
+		print "CONTENT OK: EXPR $opts{m} FOUND on $opts{U}|time=".$run_time."s;;;0.000000 size=".$bytes_received."B;;;0 \n";
 		$status = EXIT_OK;
 	} else {
 		my @output_lines = split(/\n/, $content);
