@@ -7,6 +7,16 @@
 #
 # Copyright 2007, CAPSiDE SL	http://www.capside.com
 # Licensed under GPLv2
+#------------------------------------------------------------------------------
+# 	Updated by Vahid Hedayati April 2013 - (improves nagios plugin result)
+# 	Performance data for graphing added:
+# 	1. time taken in milli seconds
+# 	2. content size
+#	Also added url and pattern match in alert output to make it easier to 
+# 	identify actual issue
+# 	This matches the check_http performance layout 
+# 	and produces graphs in the same way
+#------------------------------------------------------------------------------
 #     This program is free software; you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
 #     the Free Software Foundation; either version 2 of the License, or
