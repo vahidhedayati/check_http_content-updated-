@@ -28,9 +28,10 @@ if [ $? -ne 0 ] ; then
 	exit 2
 else
 	f=$(date +%s.%N)
-	sum=$(echo $f|awk -v s=$s '{$3 = $1 - 's';  printf "%f", $3}')
-	head="POST $h_url HTTP/1.1\r\nHost: $(uname -n)\r\nContent-type: text/html\r\nContent-length: 10\r\nConnection: Close\r\n\r\n"; 
-	size=$(echo -e $head |nc $c_url 80 2>&1|grep "Content-Length:"|awk -F"Content-Length: " '{print $2}'|tr -d "\r")
-	echo "SESSION CONTENT OK: URL $h_url returned $pattern|time="$sum"ms;;;;0 size="$size"B;;;0"
+	#sum=$(echo $f|awk -v s=$s '{$3 = $1 - 's';  printf "%f", $3}')
+	#head="POST $h_url HTTP/1.1\r\nHost: $(uname -n)\r\nContent-type: text/html\r\nContent-length: 10\r\nConnection: Close\r\n\r\n"; 
+	#size=$(echo -e $head |nc $c_url 80 2>&1|grep "Content-Length:"|awk -F"Content-Length: " '{print $2}'|tr -d "\r")
+	#echo "SESSION CONTENT OK: URL $h_url returned $pattern|time="$sum"ms;;;;0 size="$size"B;;;0"
+	echo "SESSION CONTENT OK: URL $h_url returned $pattern|time="$sum"ms;;;;0 "
 	exit 0;
 fi
