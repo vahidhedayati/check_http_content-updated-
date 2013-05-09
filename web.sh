@@ -10,8 +10,6 @@
 #
 # To enable the monitor in Appmanager, use the following settings:
 
-
-
 function find_pattern() { 
 	s=$(date +%s.%N)
 
@@ -45,13 +43,14 @@ function find_pattern() {
  		h_url="http://"$b_url":"$PORT$e_url
 
   	head="POST $h_url HTTP/1.1\r\nHost: $(uname -n)\r\nContent-type: text/html\r\nContent-length: 10\r\nConnection: Close\r\n\r\n";
+	# Enable below to see actual output for debugging purposes
+	#echo -e "$head" |nc $c_url $PORT  2>&1
   	return=$(echo -e "$head" |nc $c_url $PORT  2>&1|egrep "(Content-Length:|$PATTERN)")
   	clfound=0;
   	cpfound=0;
-
 	if [[ $return =~  "Content-Length:" ]]; then
 		clfound=1;
-		clength=$(echo $return|grep  "Content-Length:"|awk -F"Content-Length: " '{print $2}'|tr -d "\r")
+		clength=$(echo $return|grep  "Content-Length:"|awk -F"Content-Length: " '{print $2}'|awk -F" " '{print $1}'|tr -d "\r")
 		
 	fi
 	if [[ $return =~ "$PATTERN" ]]; then
@@ -71,7 +70,7 @@ function find_pattern() {
         sum=$(echo $f|awk -v s=$s '{$3 = $1 - 's';  printf "%f", $3}')
 
 	if [[ $cpfound -ge 1 ]]; then 
-		echo "HTTP CONTENT OK: URL $h_url returned $cpattern|time="$sum"ms;;;;0 size="$clength"B;;;0"
+		echo "HTTP CONTENT OK: URL $h_url returned $PATTERN|time="$sum"ms;;;;0 size="$clength"B;;;0"
         	exit 0;
 	else
 		echo "HTTP CONTENT CRITICAL: URL $h_url did not return $PATTERN|time="$sum"ms;;;;0 size="$clength"B;;;0"
@@ -128,4 +127,3 @@ if [ $# -eq 0 ]; then
     exit 1;
 fi
 #############################################################################################
-
