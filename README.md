@@ -33,6 +33,10 @@ http://server:8080/base/app
 Try:
 ./web.sh -u http://server/base/app -p 8080 -m text_to_match
 
+If it fails try something like:
+./web.sh -u http://server/base/app/ -p 8080 -m text_to_match
+
+
 The script will work out where to put the port if no port given it will default to 80  if no url give it will default to localhost
 
 
@@ -52,7 +56,4 @@ The script will work out where to put the port if no port given it will default 
 Mmm  just been testing this now sessions was working for sure but redirects needs a lot more work - will update it soon
 
 
-
-If it fails try something like:
-./web.sh -u http://server/base/app/ -p 8080 -m text_to_match
 
