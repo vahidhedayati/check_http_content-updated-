@@ -7,8 +7,7 @@
 # web.sh -u http://host.something/uri1/etc -p 8080 -m content
 #
 # This will then load the full URL requested, and will search the page for the word "content". 
-#
-# To enable the monitor in Appmanager, use the following settings:
+# Issues with redirects - session content should work 
 
 function find_pattern() { 
 	s=$(date +%s.%N)
