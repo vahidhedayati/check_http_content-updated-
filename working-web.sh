@@ -7,8 +7,12 @@ url=$1;
 pattern=$2;
 
 if [[ $url  =~ http:// ]]; then
-  h_url=$url
+        h_url=$url
        	c_url=$(echo $url|sed -e "s:http\://::g")
+elif [[ $url  =~ https:// ]]; then
+  	h_url=$url
+        c_url=$(echo $url|sed -e "s:https\://::g")
+
 else
 	h_url="http://"$url;
 	c_url=$url;
