@@ -45,6 +45,10 @@ function find_pattern() {
 	# Enable below to see actual output for debugging purposes
 	#echo -e "$head" |nc $c_url $PORT  2>&1
   	return=$(echo -e "$head" |nc $c_url $PORT  2>&1|egrep "(Content-Length:|$PATTERN)")
+	# Need to parse return code if 302 parse location repost keep a tab on redirected url ensure no loop count amount of 302's 
+	# eff a lot of work - the working script using elinks is a lot cleaner - will take a further look when I have some free time 
+	#return_new=$(echo -e "$head" |nc $c_url $PORT  2>&1|awk -v pattern=$PATTERN 'BEGIN {CODE=""; LENGTH=""; NEW=""; } {  if ($0 ~ "HTTP/1.1") { CODE=$2; }; if ($0 ~ "Location:") { NEW=$2; }; if ($0 ~ "Content-Length:") { LENGTH=$2; }; } END { print CODE"--"NEW"-->"LENGTH"<---"; }');
+
   	clfound=0;
   	cpfound=0;
 	if [[ $return =~  "Content-Length:" ]]; then
