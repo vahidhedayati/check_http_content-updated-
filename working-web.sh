@@ -25,12 +25,14 @@ fi
 
  if [[ $c_url =~ : ]]; then
 	C_PORT=${c_url##*:}
+	b_url=${c_url%:*}  
 	if [[ $C_PORT =~ / ]]; then
 	 C_PORT=${C_PORT%%/*} 
+	 e_url=${c_url#*/}
 	fi
  	PORT=$C_PORT
- fi
-
+	e_url="/"$e_url
+ else
 	if [[ $c_url =~ / ]]; then
 		b_url=${c_url%%/*}
   		e_url=${c_url#*/}
@@ -44,11 +46,13 @@ fi
 		b_url=$c_url;
 		e_url="/";
 	fi
-	if [[ $PORT =~ 443 ]]; then 
-	h_url="https://"$b_url":"$PORT$e_url
-	else
-	h_url="http://"$b_url":"$PORT$e_url
-	fi
+  fi
+
+ if [[ $PORT =~ 443 ]]; then 
+  h_url="https://"$b_url":"$PORT$e_url
+ else
+  h_url="http://"$b_url":"$PORT$e_url
+ fi
 	#echo $h_url
 s=$(date +%s.%N)
 elinks --dump "$h_url" | grep "$pattern" >/dev/null 2>&1
@@ -63,7 +67,7 @@ else
 	size=0;
 	if [[ ! "$PORT" == "443" ]]; then
 		head="HEAD $h_url HTTP/1.1\r\nHost: $(uname -n)\r\nContent-type: text/html\r\nContent-length: 10\r\nConnection: Close\r\n\r\n"; 
-		#echo "-- $h_url -- $c_url"
+		echo "-- $h_url -- $c_url"
 		size=$(echo -e $head |nc $c_url $PORT 2>&1|grep "Content-Length:"|awk -F"Content-Length: " '{print $2}'|tr -d "\r")
 		if [ "$size" == "" ]; then
 			size=0;
