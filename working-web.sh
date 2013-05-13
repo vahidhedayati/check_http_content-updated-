@@ -1,7 +1,11 @@
 #!/bin/bash
-
+# Examples
 # ./web.sh http://url pattern
 # ./web.sh http://localhost apache
+# ./working-web.sh https://www.gooogle.com google
+# ./working-web.sh https://www.gooogle.com:443/google google
+# ./working-web.sh http://www.gooogle.com:8080/google google
+
 
 url=$1;
 pattern=$2;
