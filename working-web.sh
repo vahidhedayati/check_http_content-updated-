@@ -51,7 +51,12 @@ fi
  if [[ $PORT =~ 443 ]]; then 
   h_url="https://"$b_url":"$PORT$e_url
  else
-  h_url="http://"$b_url":"$PORT$e_url
+	if [[ $c_url =~ : ]]; then
+  		h_url="http://"$b_url":"$PORT$e_url
+	else
+  		h_url="http://"$b_url$e_url
+	fi
+		
  fi
 	#echo $h_url
 s=$(date +%s.%N)
