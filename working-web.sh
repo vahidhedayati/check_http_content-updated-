@@ -67,7 +67,7 @@ else
 	size=0;
 	if [[ ! "$PORT" == "443" ]]; then
 		head="HEAD $h_url HTTP/1.1\r\nHost: $(uname -n)\r\nContent-type: text/html\r\nContent-length: 10\r\nConnection: Close\r\n\r\n"; 
-		echo "-- $h_url -- $c_url"
+		#echo "-- $h_url -- $c_url"
 		size=$(echo -e $head |nc $c_url $PORT 2>&1|grep "Content-Length:"|awk -F"Content-Length: " '{print $2}'|tr -d "\r")
 		if [ "$size" == "" ]; then
 			size=0;
