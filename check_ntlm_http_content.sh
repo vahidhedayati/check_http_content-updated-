@@ -9,6 +9,9 @@
 # HTTP ( POST/GET/HEAD )  method 
 # Using netcat makes a connection and looks for the pattern
 ###################################################################################
+# ./check_ntlm_http_content.sh -h
+# ./check_ntlm_http_content.sh -U http://url.com -u user -p pass -m Some_pattern
+###################################################################################
 
 
 function find_pattern() { 
