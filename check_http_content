@@ -63,13 +63,19 @@ if (not (defined $opts{U} and defined $opts{m})) {
 	exit EXIT_CRITICAL;
 }
 
+my @headers = (
+ 'Accept' => 'image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*',
+ 'Accept-Charset' => 'iso-8859-1,*,utf-8',
+ 'Accept-Language' => 'en-US',
+);
+
 my $status = EXIT_OK;
 # set trx timeout 
 my $ua = LWP::UserAgent->new;
 $ua->timeout($opts{t});
 
 # retrieve url
- my $response = $ua->get($opts{U});
+ my $response = $ua->get($opts{U}, @headers);
  my $expected_length;
  my $bytes_received = 0;
  my $end_run   = time;
